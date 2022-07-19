@@ -54,7 +54,7 @@ function renderSchedule() {
 }
 
 //Save input to local storage
-function saveHandler() {
+function saveInput() {
   let thisBlock = $(this).parent();
 
   let toDoHourInput = parseInt(thisBlock.attr("data-hour"));
@@ -81,5 +81,5 @@ $(document).ready(function () {
   //If data is in local storage run renderSchedule()
   renderSchedule();
   //Event listener
-  scheduleArea.on("click", "button", saveHandler);
+  scheduleArea.on("click", "button", saveInput);
 });
