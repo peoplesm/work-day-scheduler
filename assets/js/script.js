@@ -27,16 +27,59 @@ function colorTimeBlocks() {
   });
 }
 
-//Save text area input to local storage
+//Start up
+function startSchedule() {
+  timeBlock.each(function () {
+    let thisBlock = $(this);
+    let thisBlockHour = parseInt(thisBlock.attr("data-hour"));
+    let toDoObj = {
+      toDoHour: thisBlockHour,
+      toDo: "",
+    };
+    toDoItems.push(toDoObj);
+  });
+  localStorage.setItem("todos", JSON.stringify(toDoItems));
+}
+
+//Render Schedule
+function renderSchedule() {
+  toDoItems = JSON.parse(localStorage.getItem("todos"));
+  for (let i = 0; i < toDoItems.length; i++) {
+    let objHour = toDoItems[i].toDoHour;
+    let objToDo = toDoItems[i].toDo;
+    $("[data-hour=" + objHour + "]")
+      .children("textarea")
+      .val(objToDo);
+  }
+}
+
+//Save input to local storage
+function saveHandler() {
+  let thisBlock = $(this).parent();
+
+  let toDoHourInput = parseInt(thisBlock.attr("data-hour"));
+  let toDoInput = thisBlock.children("textarea").val();
+
+  for (let i = 0; i < toDoItems.length; i++) {
+    if (toDoItems[i].toDoHour === toDoHourInput) {
+      toDoItems[i].toDo = toDoInput;
+    }
+  }
+  localStorage.setItem("todos", JSON.stringify(toDoItems));
+  renderSchedule();
+}
 
 //On Load
 $(document).ready(function () {
   //display current date
   currentDay.text(today);
   colorTimeBlocks();
-
-  //render schedule from local storage
-
-  //when a todo item save button is clicked, save it
-  //   scheduleArea.on("click", "button", saveHandler);
+  //Check local storage if nothing goto startSchedule()
+  if (!localStorage.getItem("todos")) {
+    startSchedule();
+  }
+  //If data is in local storage run renderSchedule()
+  renderSchedule();
+  //Event listener
+  scheduleArea.on("click", "button", saveHandler);
 });
