@@ -2,7 +2,7 @@
 
 This project we were assigned to create a simple calendar application that allows a user to save events for each hour of the day.
 
-## Skill Practiced
+## Skills Practiced
 
 - Storing and accessing the local storage
 - Using .each to go through multiple elements and assign the same things.
