@@ -8,64 +8,60 @@ let today = moment().format("dddd, MMMM Do, YYYY");
 let currentHour = moment().format("H");
 
 //Array for saved items
-let toDoItems = [];
+let toDoItemsArr = [];
 
 //Color code text areas based on time
-function colorTimeBlocks() {
+function colorCells() {
   timeBlock.each(function () {
     let thisBlock = $(this);
     let thisBlockHour = parseInt(thisBlock.attr("data-hour"));
     if (thisBlockHour == currentHour) {
-      thisBlock.addClass("present").removeClass("past future");
-    }
-    if (thisBlockHour > currentHour) {
-      thisBlock.addClass("future").removeClass("present past");
-    }
-    if (thisBlockHour < currentHour) {
-      thisBlock.addClass("past").removeClass("present future");
+      thisBlock.addClass("present");
+    } else if (thisBlockHour > currentHour) {
+      thisBlock.addClass("future");
+    } else if (thisBlockHour < currentHour) {
+      thisBlock.addClass("past");
     }
   });
 }
 
 //Start up
-function startSchedule() {
+function startUp() {
   timeBlock.each(function () {
     let thisBlock = $(this);
     let thisBlockHour = parseInt(thisBlock.attr("data-hour"));
     let toDoObj = {
-      toDoHour: thisBlockHour,
+      hour: thisBlockHour,
       toDo: "",
     };
-    toDoItems.push(toDoObj);
+    toDoItemsArr.push(toDoObj);
   });
-  localStorage.setItem("todos", JSON.stringify(toDoItems));
+  localStorage.setItem("todo", JSON.stringify(toDoItemsArr));
 }
 
 //Render Schedule
 function renderSchedule() {
-  toDoItems = JSON.parse(localStorage.getItem("todos"));
-  for (let i = 0; i < toDoItems.length; i++) {
-    let objHour = toDoItems[i].toDoHour;
-    let objToDo = toDoItems[i].toDo;
-    $("[data-hour=" + objHour + "]")
+  toDoItemsArr = JSON.parse(localStorage.getItem("todo"));
+  for (let i = 0; i < toDoItemsArr.length; i++) {
+    let itemHour = toDoItemsArr[i].hour;
+    let itemToDo = toDoItemsArr[i].toDo;
+    $("[data-hour=" + itemHour + "]")
       .children("textarea")
-      .val(objToDo);
+      .val(itemToDo);
   }
 }
 
 //Save input to local storage
 function saveInput() {
   let thisBlock = $(this).parent();
-
-  let toDoHourInput = parseInt(thisBlock.attr("data-hour"));
+  let hourInput = parseInt(thisBlock.attr("data-hour"));
   let toDoInput = thisBlock.children("textarea").val();
-
-  for (let i = 0; i < toDoItems.length; i++) {
-    if (toDoItems[i].toDoHour === toDoHourInput) {
-      toDoItems[i].toDo = toDoInput;
+  for (let i = 0; i < toDoItemsArr.length; i++) {
+    if (hourInput === toDoItemsArr[i].hour) {
+      toDoItemsArr[i].toDo = toDoInput;
     }
   }
-  localStorage.setItem("todos", JSON.stringify(toDoItems));
+  localStorage.setItem("todo", JSON.stringify(toDoItemsArr));
   renderSchedule();
 }
 
@@ -73,10 +69,11 @@ function saveInput() {
 $(document).ready(function () {
   //display current date
   currentDay.text(today);
-  colorTimeBlocks();
-  //Check local storage if nothing goto startSchedule()
-  if (!localStorage.getItem("todos")) {
-    startSchedule();
+  //Color cells
+  colorCells();
+  //Check local storage if nothing goto startUp()
+  if (!localStorage.getItem("todo")) {
+    startUp();
   }
   //If data is in local storage run renderSchedule()
   renderSchedule();
