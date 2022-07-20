@@ -14,16 +14,13 @@ textarea {
   padding: 10px;
 }
 
+/* Header */
 .jumbotron {
   text-align: center;
   background-color: transparent;
   color: black;
   border-radius: 0;
   border-bottom: 10px solid black;
-}
-
-.description {
-  white-space: pre-wrap;
 }
 
 /* Whole time row */
@@ -42,6 +39,9 @@ textarea {
   background-color: #ffffff;
   color: #000000;
   border-top: 1px dashed #000000;
+  display: flex;
+  align-items: center;
+  justify-content: right;
 }
 
 /* Color background based on the actual time of day */

@@ -67,9 +67,7 @@ function saveInput() {
 
 //On Load
 $(document).ready(function () {
-  //display current date
   currentDay.text(today);
-  //Color cells
   colorCells();
   //Check local storage if nothing goto startUp()
   if (!localStorage.getItem("todo")) {
